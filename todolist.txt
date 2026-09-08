@@ -5,3 +5,4 @@ sukses|0
 Belajar|0
 pulang|0
 masak|0
+minum|0

@@ -8,6 +8,17 @@ struct Todo {
     bool completed;
 };
 
+bool rewriteFile(struct Todo* todos, int* dataSize) {
+    FILE *pFile = fopen("output.txt", "w");
+    if(pFile == NULL) return false;
+    for(int i = 0; i < *dataSize; i++) {
+        fprintf(pFile, "%s|%s", todos[i].title, todos[i].completed ? "1" : "0");
+    }
+    fclose(pFile);
+    return true;
+
+}
+
 int main() {
     int dataSize = 0;
     struct Todo *todos = NULL; 
@@ -87,6 +98,10 @@ int main() {
                 FILE *pFile = fopen("todolist.txt", "a");
                 fprintf(pFile, "%s|%s\n",newTodo.title, newTodo.completed ? "1" : "0");
                 fclose(pFile);
+
+                printf("=========================\n");
+                printf("Success!");
+                printf("=========================\n");
                 break;
             case 3:
                 getchar();
@@ -94,6 +109,23 @@ int main() {
                 break;
             case 4:
                 getchar();
+
+                printf("=========================\n");
+
+                for(int i = 0; i < dataSize; i++) {
+                    if(todos[i].completed) continue;
+                    printf("%d. %s | %s\n",i + 1, todos[i].title, todos[i].completed ? "Completed" : "Not Completed");
+                }
+                printf("=========================\n");
+
+                int index = -1;
+                printf("Choose a todo to complete: ");
+                scanf("%d", &index);
+                if(index < 0 || index > dataSize) {
+                    printf("Todo at index %d does not exist", index);
+                    break;
+                }
+                todos[index - 1].completed = true;
 
                 break;
             case 5:
