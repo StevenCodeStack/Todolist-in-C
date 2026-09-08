@@ -44,15 +44,74 @@ int main() {
         temp = NULL;
         todos[dataSize - 1] = newTodo;  
     }
+
+    fclose(pFile);
     
-    for(int i = 0; i < dataSize; i++) {
-        printf("%s | %s\n", todos[i].title, todos[i].completed ? "Completed" : "Not Completed");
+    int choice = 0;
+    bool exit = false;
+
+    while(!exit) {
+        printf("Welcome to todolist app, terminal based\n");
+        printf("1. List all todo-s\n");
+        printf("2. Add a new todo\n");
+        printf("3. Delete a todo\n");
+        printf("4. Complete a todo\n");
+        printf("5. Exit\n");
+        printf("Enter your option: ");
+        scanf("%d", &choice);
+        switch(choice) {
+            case 1:
+                getchar();
+
+                printf("=========================\n");
+                for(int i = 0; i < dataSize; i++) {
+                    printf("%s | %s\n", todos[i].title, todos[i].completed ? "Completed" : "Not Completed");
+                }
+                printf("=========================\n");
+                break;
+            case 2:
+                getchar();
+
+                dataSize++;
+                char title[100];
+                printf("Enter the title: ");
+                fgets(title, sizeof(title), stdin);
+                title[strcspn(title, "\n")] = '\0';
+
+                struct Todo newTodo;
+                newTodo.completed = false;
+                strcpy(newTodo.title, title);
+                todos = (struct Todo*) realloc(todos,dataSize * sizeof(struct Todo));
+                todos[dataSize - 1] = newTodo;
+
+                FILE *pFile = fopen("todolist.txt", "a");
+                fprintf(pFile, "%s|%s\n",newTodo.title, newTodo.completed ? "1" : "0");
+                fclose(pFile);
+                break;
+            case 3:
+                getchar();
+
+                break;
+            case 4:
+                getchar();
+
+                break;
+            case 5:
+                getchar();
+
+                exit = true;
+                printf("Goodbye\n");
+                break;
+            default:
+                printf("Option %d does not exist", choice);
+                break;
+        }
+        choice = 0;
     }
     
     free(todos);
     todos = NULL;
 
-    fclose(pFile);
 
     return 0;
 }
