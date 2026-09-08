@@ -9,10 +9,10 @@ struct Todo {
 };
 
 bool rewriteFile(struct Todo* todos, int* dataSize) {
-    FILE *pFile = fopen("output.txt", "w");
+    FILE *pFile = fopen("todolist.txt", "w");
     if(pFile == NULL) return false;
     for(int i = 0; i < *dataSize; i++) {
-        fprintf(pFile, "%s|%s", todos[i].title, todos[i].completed ? "1" : "0");
+        fprintf(pFile, "%s|%s\n", todos[i].title, todos[i].completed ? "1" : "0");
     }
     fclose(pFile);
     return true;
@@ -71,16 +71,18 @@ int main() {
         printf("Enter your option: ");
         scanf("%d", &choice);
         switch(choice) {
-            case 1:
+            case 1: {
                 getchar();
 
                 printf("=========================\n");
                 for(int i = 0; i < dataSize; i++) {
-                    printf("%s | %s\n", todos[i].title, todos[i].completed ? "Completed" : "Not Completed");
+                    printf("%d. %s | %s\n",i + 1, todos[i].title, todos[i].completed ? "Completed" : "Not Completed");
                 }
                 printf("=========================\n");
                 break;
-            case 2:
+            }
+  
+            case 2: {
                 getchar();
 
                 dataSize++;
@@ -103,11 +105,45 @@ int main() {
                 printf("Success!");
                 printf("=========================\n");
                 break;
-            case 3:
+            }
+   
+            case 3: {
                 getchar();
 
+                printf("=========================\n");
+
+                for(int i = 0; i < dataSize; i++) {
+                    printf("%d. %s | %s\n",i + 1, todos[i].title, todos[i].completed ? "Completed" : "Not Completed");
+                }
+                printf("=========================\n");
+
+                int index = -1;
+                printf("Choose a todo to delete: ");
+                scanf("%d", &index);
+                if(index < 0 || index > dataSize) {
+                    printf("Todo at index %d does not exist", index);
+                    break;
+                }
+                index--;
+                while(index < dataSize - 1) {
+                    todos[index] = todos[index + 1];
+                    index += 1;
+                }
+                dataSize--;
+                todos = (struct Todo*) realloc(todos, dataSize * sizeof(struct Todo));
+
+                bool result = rewriteFile(todos, &dataSize);
+
+                if(!result) {
+                    printf("Failed to delete the data");
+                    return 1;
+                }
+                printf("Successfully delete the data");
+
                 break;
-            case 4:
+            }
+
+            case 4: {
                 getchar();
 
                 printf("=========================\n");
@@ -128,15 +164,20 @@ int main() {
                 todos[index - 1].completed = true;
 
                 break;
-            case 5:
+            }
+
+            case 5: {
                 getchar();
 
                 exit = true;
                 printf("Goodbye\n");
                 break;
-            default:
+            }
+            default: {
                 printf("Option %d does not exist", choice);
                 break;
+            }
+          
         }
         choice = 0;
     }

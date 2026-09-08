@@ -1,8 +1,4 @@
-mandi|1
-makan|1
-tidur|0
 sukses|0
 Belajar|0
 pulang|0
 masak|0
-minum|0
