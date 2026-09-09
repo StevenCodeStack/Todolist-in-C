@@ -163,6 +163,13 @@ int main() {
                 }
                 todos[index - 1].completed = true;
 
+                bool result = rewriteFile(todos, &dataSize);
+                if(result) printf("Success!\n");
+                else {
+                    printf("Failed\n");
+                    return 1;
+                }
+
                 break;
             }
 
