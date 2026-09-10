@@ -1,5 +1,1 @@
-sukses|0
-Belajar|0
-pulang|0
-masak|0
-kill athari|1
+mandi|0
