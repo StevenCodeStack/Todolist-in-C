@@ -8,7 +8,7 @@
 
 int main(int argc, char *argv[]) {
 
-    char * commands[] = {"ls", "complete"};
+    char * commands[] = {"ls", "complete", "add"};
     int commandsLength = sizeof(commands) / sizeof(commands[0]);
 
     if(argc <= 1) {
@@ -36,16 +36,18 @@ int main(int argc, char *argv[]) {
     char delimiter[] = "|";
 
     while(fgets(buffer, sizeof(buffer), pFile) != NULL) {
+        Todo newTodo;
         char *token = strtok(buffer, delimiter);
-        char *title = token;
+        strcpy(newTodo.title, token);
+
         token = strtok(NULL, delimiter);
         char *completedNum = token;
         completedNum[strcspn(completedNum, "\n")] = '\0';
 
-        Todo newTodo = {
-            .title = title,
-            .completed = strcmp(completedNum, "1") == 0
-        };
+        // printf("data: %s\n", completedNum);
+        // printf("comparison:%d\n", strcmp(completedNum, "1"));
+
+        newTodo.completed = (strcmp(completedNum, "1") == 0);
 
         dataSize++;
         todos = realloc(todos, dataSize * sizeof(Todo));
@@ -79,8 +81,25 @@ int main(int argc, char *argv[]) {
                 printf("Enter a positive number (num >= 1)\n");
                 break;
             }
+            if(todoNum > dataSize) {
+                printf("Out of bounds. Datasize is only %d\n", dataSize);
+                break;
+            }
             completeTodo(todos, dataSize, todoNum);
-
+            break;
+        }
+        case 2: {
+            if(argc <= 2) {
+                printf("Command: todo add \"<title>\"\n");
+                break;
+            }
+            char *check = strstr(argv[2], "|");
+            if(check != NULL) {
+                printf("Title cannot contain '%s' as it is used as delimiter\n", delimiter);
+                break;
+            }
+            addTodo(todos, &dataSize, argv[2]);
+            break;
         }
     }
 

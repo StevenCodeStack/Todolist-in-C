@@ -1,15 +1,17 @@
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 typedef struct Todo {
-    char * title;
+    char title[100];
     bool completed;
 }Todo;
 
 void rewriteFile(Todo * todos, int dataSize) {
     FILE *pFile = fopen("todolist.txt", "w");
     for(int i = 0; i < dataSize; i++) {
-        fprintf(pFile, "%s|%s\n", todos[i].title, todos[i].completed ? "0" : "1");
+        fprintf(pFile,"%s|%s\n", todos[i].title, todos[i].completed ? "1" : "0");
     }
     fclose(pFile);
 }
@@ -23,6 +25,17 @@ void listTodo(Todo * todos, int dataSize) {
 }
 
 void completeTodo(Todo * todos, int dataSize, int todoNum ) {
-    todos[todoNum].completed = !(todos[todoNum].completed);
+    todos[todoNum - 1].completed = !(todos[todoNum - 1].completed);
     rewriteFile(todos, dataSize);
+}
+
+void addTodo(Todo *todos, int *pDataSize, char *title) {
+    (*pDataSize)++;
+    Todo newTodo = {
+        .completed = false
+    };
+    strcpy(newTodo.title, title);
+    todos = realloc(todos, *pDataSize * sizeof(Todo));
+    todos[*pDataSize - 1] = newTodo;
+    rewriteFile(todos, *pDataSize);
 }

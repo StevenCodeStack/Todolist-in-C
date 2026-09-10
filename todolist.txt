@@ -1,1 +1,2 @@
-mandi|0
+test|0
+test 2|1
