@@ -35,14 +35,14 @@ void addTodo(Todo **todos, int *pDataSize, char *title) {
         .completed = false
     };
     strcpy(newTodo.title, title);
-    *todos = realloc(todos, *pDataSize * sizeof(Todo));
-    *todos[*pDataSize - 1] = newTodo;
+    *todos = realloc(*todos, *pDataSize * sizeof(Todo));
+    (*todos)[*pDataSize - 1] = newTodo;
     rewriteFile(*todos, *pDataSize);
 }
 
 void deleteTodo(Todo **todos, int *pDataSize, int todoNum) {
     int index = todoNum - 1;
-    for(int i = index; i < (*pDataSize); i++) {
+    for(int i = index; i < (*pDataSize) - 1; i++) {
         (*todos)[i] = (*todos)[i + 1];
     }
 
