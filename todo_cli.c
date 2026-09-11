@@ -8,7 +8,7 @@
 
 int main(int argc, char *argv[]) {
 
-    char * commands[] = {"ls", "complete", "add"};
+    char * commands[] = {"ls", "complete", "add", "delete"};
     int commandsLength = sizeof(commands) / sizeof(commands[0]);
 
     if(argc <= 1) {
@@ -98,7 +98,24 @@ int main(int argc, char *argv[]) {
                 printf("Title cannot contain '%s' as it is used as delimiter\n", delimiter);
                 break;
             }
-            addTodo(todos, &dataSize, argv[2]);
+            addTodo(&todos, &dataSize, argv[2]);
+            break;
+        }
+        case 3: {
+            if(argc <= 2) {
+                printf("Command: todo delete <todo number>\n");
+                break;
+            }
+            int todoNum = atoi(argv[2]);
+            if(todoNum == 0) {
+                printf("Enter a positive number (num >= 1)\n");
+                break;
+            }
+            if(todoNum > dataSize) {
+                printf("Out of bounds. Datasize is only %d\n", dataSize);
+                break;
+            }
+            deleteTodo(&todos, &dataSize, todoNum);
             break;
         }
     }

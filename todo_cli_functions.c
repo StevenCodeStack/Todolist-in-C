@@ -24,18 +24,30 @@ void listTodo(Todo * todos, int dataSize) {
     printf("==============================\n");
 }
 
-void completeTodo(Todo * todos, int dataSize, int todoNum ) {
+void completeTodo(Todo *todos, int dataSize, int todoNum ) {
     todos[todoNum - 1].completed = !(todos[todoNum - 1].completed);
     rewriteFile(todos, dataSize);
 }
 
-void addTodo(Todo *todos, int *pDataSize, char *title) {
+void addTodo(Todo **todos, int *pDataSize, char *title) {
     (*pDataSize)++;
     Todo newTodo = {
         .completed = false
     };
     strcpy(newTodo.title, title);
-    todos = realloc(todos, *pDataSize * sizeof(Todo));
-    todos[*pDataSize - 1] = newTodo;
-    rewriteFile(todos, *pDataSize);
+    *todos = realloc(todos, *pDataSize * sizeof(Todo));
+    *todos[*pDataSize - 1] = newTodo;
+    rewriteFile(*todos, *pDataSize);
+}
+
+void deleteTodo(Todo **todos, int *pDataSize, int todoNum) {
+    int index = todoNum - 1;
+    for(int i = index; i < (*pDataSize); i++) {
+        (*todos)[i] = (*todos)[i + 1];
+    }
+
+    (*pDataSize)--;
+
+    *todos = realloc(*todos, (*pDataSize) * sizeof(Todo));
+    rewriteFile(*todos, *pDataSize);
 }
